@@ -4,7 +4,7 @@ import com.wordalytica.wordset.core.WordSet;
 import com.wordalytica.wordset.predicate.Predicate;
 import com.wordalytica.wordset.predicate.PredicateBuilder;
 
-public abstract class AbstractWordSet<T extends AbstractWordSet<T>> implements WordSet {
+public abstract class AbstractWordSet<T extends WordSet<T>> implements WordSet<T> {
     private PredicateBuilder predicateBuilder;
 
     public AbstractWordSet() {
@@ -26,40 +26,38 @@ public abstract class AbstractWordSet<T extends AbstractWordSet<T>> implements W
     }
 
     @Override
-    public WordSet longerThan(int minLength) {
+    public T longerThan(int minLength) {
         this.predicateBuilder.longerThan(minLength);
-        return this;
+        return (T)this;
     }
 
     @Override
-    public WordSet containing(String value) {
+    public T containing(String value) {
         this.predicateBuilder.containing(value);
-        return this;
+        return (T)this;
     }
 
     @Override
-    public WordSet endingWith(String value) {
+    public T endingWith(String value) {
         this.predicateBuilder.endingWith(value);
-        return this;
+        return (T)this;
     }
 
     @Override
-    public WordSet startingWith(String value) {
+    public T startingWith(String value) {
         this.predicateBuilder.startingWith(value);
-        return this;
+        return (T)this;
     }
 
     @Override
-    public WordSet notEndingWith(String value) {
+    public T notEndingWith(String value) {
         this.predicateBuilder.notEndingWith(value);
-        return this;
+        return (T)this;
     }
 
     @Override
-    public WordSet matching(String placeHolded) {
+    public T matching(String placeHolded) {
         this.predicateBuilder.matching(placeHolded);
-        return this;
+        return (T)this;
     }
-
-
 }

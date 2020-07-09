@@ -56,7 +56,7 @@ public class Benchmarker {
     @State(Scope.Thread)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public static abstract class WordsetBenchmark {
-        ConcurrentHashMap<Class<? extends WordsetBenchmark>, WordSet> classNameToWordSet = new ConcurrentHashMap<>();
+        ConcurrentHashMap<Class<? extends WordsetBenchmark>, WordSet<?>> classNameToWordSet = new ConcurrentHashMap<>();
 
         @Setup
         public void setup() {
@@ -64,30 +64,39 @@ public class Benchmarker {
         }
 
         @Benchmark
-        @Warmup(iterations = 5, time = 100, timeUnit = TimeUnit.MILLISECONDS)
-        @Measurement(iterations = 5, time = 100, timeUnit = TimeUnit.MILLISECONDS)
+        @Warmup(iterations = 10, time = 100, timeUnit = TimeUnit.MILLISECONDS)
+        @Measurement(iterations = 10, time = 100, timeUnit = TimeUnit.MILLISECONDS)
         public void performOperations() {
-            WordSet wordset = classNameToWordSet.get(this.getClass());
+            WordSet<?> wordset = classNameToWordSet.get(this.getClass());
             wordset.endingWith("ing").count();
+            wordset.startingWith("foo").containing("bar").count();
+            wordset.matching("benc_mark").count();
+            wordset.startingWith("fish").notEndingWith("ing").count();
         }
 
-        protected abstract WordSet buildWordSet();
+        protected abstract WordSet<?> buildWordSet();
     }
 
     public static class BenchmarkV0 extends WordsetBenchmark {
         @Override
-        protected WordSet buildWordSet() {
+        protected WordSet<?> buildWordSet() {
             return WordSetFactory.buildNoop();
         }
     }
 
     public static class BenchmarkV1 extends WordsetBenchmark {
         @Override
-        protected WordSet buildWordSet() {
-            return WordSetFactory.build(this, "words.all");
+        protected WordSet<?> buildWordSet() {
+            return WordSetFactory.build(this, "words.all", 1);
         }
     }
 
+    public static class BenchmarkV2 extends WordsetBenchmark {
+        @Override
+        protected WordSet<?> buildWordSet() {
+            return WordSetFactory.build(this, "words.all", 2);
+        }
+    }
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *
@@ -96,10 +105,10 @@ public class Benchmarker {
      * How to run this outside of the IDE is described here:
      * http://openjdk.java.net/projects/code-tools/jmh/
      */
-
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(Benchmarker.class.getSimpleName())
+                //.addProfiler("org.openjdk.jmh.profile.HotspotMemoryProfiler")
                 .build();
 
         new Runner(opt).run();

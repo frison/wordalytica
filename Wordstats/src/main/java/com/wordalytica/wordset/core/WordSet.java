@@ -2,20 +2,20 @@ package com.wordalytica.wordset.core;
 
 import java.util.Iterator;
 
-public interface WordSet {
+public interface WordSet<T extends WordSet<T>> {
     Iterator<String> iterator();
 
     int count();
 
-    WordSet longerThan(int minLength);
+    T longerThan(int minLength);
 
-    WordSet containing(String value);
+    T containing(String value);
 
-    WordSet endingWith(String value);
+    T endingWith(String value);
 
-    WordSet startingWith(String value);
+    T startingWith(String value);
 
-    WordSet notEndingWith(String value);
+    T notEndingWith(String value);
 
-    WordSet matching(String placeHolded);
+    T matching(String placeHolded);
 }

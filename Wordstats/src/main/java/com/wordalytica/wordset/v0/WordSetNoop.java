@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 // This class should serve as the lower bound for performance measure. We'll never beat
 // the speed of this class.
-public class WordSetNoop implements WordSet {
+public class WordSetNoop implements WordSet<WordSetNoop> {
     @Override
     public Iterator<String> iterator() {
         return Collections.emptyIterator();
@@ -19,32 +19,32 @@ public class WordSetNoop implements WordSet {
     }
 
     @Override
-    public WordSet longerThan(int minLength) {
+    public WordSetNoop longerThan(int minLength) {
         return this;
     }
 
     @Override
-    public WordSet containing(String value) {
+    public WordSetNoop containing(String value) {
         return this;
     }
 
     @Override
-    public WordSet endingWith(String value) {
+    public WordSetNoop endingWith(String value) {
         return this;
     }
 
     @Override
-    public WordSet startingWith(String value) {
+    public WordSetNoop startingWith(String value) {
         return this;
     }
 
     @Override
-    public WordSet notEndingWith(String value) {
+    public WordSetNoop notEndingWith(String value) {
         return this;
     }
 
     @Override
-    public WordSet matching(String placeHolded) {
+    public WordSetNoop matching(String placeHolded) {
         return this;
     }
 }
