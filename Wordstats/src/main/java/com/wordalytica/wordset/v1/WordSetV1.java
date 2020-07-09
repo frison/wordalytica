@@ -1,4 +1,4 @@
-package com.wordalytica.wordset;
+package com.wordalytica.wordset.v1;
 
 import com.wordalytica.wordset.predicate.Predicate;
 
@@ -8,7 +8,7 @@ import java.util.Iterator;
 public class WordSetV1 extends AbstractWordSet {
     private HashSet<String> words;
 
-    protected WordSetV1(Iterator<String> words) {
+    public WordSetV1(Iterator<String> words) {
         this.words = new HashSet<>();
         words.forEachRemaining(this.words::add);
     }

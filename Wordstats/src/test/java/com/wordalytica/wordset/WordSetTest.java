@@ -1,5 +1,6 @@
 package com.wordalytica.wordset;
 
+import com.wordalytica.wordset.core.WordSet;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

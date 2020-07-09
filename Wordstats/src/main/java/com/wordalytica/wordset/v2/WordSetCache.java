@@ -1,5 +1,6 @@
-package com.wordalytica.wordset;
+package com.wordalytica.wordset.v2;
 
+import com.wordalytica.wordset.core.WordSet;
 import com.wordalytica.wordset.predicate.Predicate;
 
 import java.util.HashMap;

@@ -30,6 +30,7 @@
  */
 package com.wordalytica.wordset;
 
+import com.wordalytica.wordset.core.WordSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -45,51 +46,45 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 // TODO: Move this to it's own benchmarking module.
-// TODO: Would require the benchmarker to have the ability to create the wordsets and their lists of words
 public class Benchmarker {
     @BenchmarkMode(Mode.AverageTime)
     @Fork(1)
     @State(Scope.Thread)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public static abstract class AbstractBenchmark {
-        int x;
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public static abstract class WordsetBenchmark {
+        ConcurrentHashMap<Class<? extends WordsetBenchmark>, WordSet> classNameToWordSet = new ConcurrentHashMap<>();
 
         @Setup
         public void setup() {
-            x = 42;
+            classNameToWordSet.put(this.getClass(), buildWordSet());
         }
 
         @Benchmark
         @Warmup(iterations = 5, time = 100, timeUnit = TimeUnit.MILLISECONDS)
         @Measurement(iterations = 5, time = 100, timeUnit = TimeUnit.MILLISECONDS)
-        public double bench() {
-            return doWork() * doWork();
+        public void performOperations() {
+            WordSet wordset = classNameToWordSet.get(this.getClass());
+            wordset.endingWith("ing").count();
         }
 
-        protected abstract double doWork();
+        protected abstract WordSet buildWordSet();
     }
 
-    public static class BenchmarkLog extends AbstractBenchmark {
+    public static class BenchmarkV0 extends WordsetBenchmark {
         @Override
-        protected double doWork() {
-            return Math.log(x);
-        }
-    }
-
-    public static class BenchmarkSin extends AbstractBenchmark {
-        @Override
-        protected double doWork() {
-            return Math.sin(x);
+        protected WordSet buildWordSet() {
+            return WordSetFactory.buildNoop();
         }
     }
 
-    public static class BenchmarkCos extends AbstractBenchmark {
+    public static class BenchmarkV1 extends WordsetBenchmark {
         @Override
-        protected double doWork() {
-            return Math.cos(x);
+        protected WordSet buildWordSet() {
+            return WordSetFactory.build(this, "words.all");
         }
     }
 
@@ -98,13 +93,8 @@ public class Benchmarker {
      *
      * You can run this test, and compare different wordset performances
      *
-     * a) Via the command line:
-     *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar JMHSample_24
-     *
-     * b) Via the Java API:
-     *    (see the JMH homepage for possible caveats when running from IDE:
-     *      http://openjdk.java.net/projects/code-tools/jmh/)
+     * How to run this outside of the IDE is described here:
+     * http://openjdk.java.net/projects/code-tools/jmh/
      */
 
     public static void main(String[] args) throws RunnerException {

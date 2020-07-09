@@ -13,6 +13,8 @@
     <properties>
         <junit.version>4.13</junit.version>
         <assertj.version>3.16.1</assertj.version>
+        <java.target.version>11</java.target.version>
+        <java.source.version>11</java.source.version>
     </properties>
 
     <modules>
@@ -24,9 +26,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
                 </configuration>
             </plugin>
         </plugins>

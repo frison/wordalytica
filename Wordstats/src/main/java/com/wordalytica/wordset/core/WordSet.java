@@ -1,4 +1,4 @@
-package com.wordalytica.wordset;
+package com.wordalytica.wordset.core;
 
 import java.util.Iterator;
 

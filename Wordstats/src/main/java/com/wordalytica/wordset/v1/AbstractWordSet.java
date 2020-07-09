@@ -1,9 +1,10 @@
-package com.wordalytica.wordset;
+package com.wordalytica.wordset.v1;
 
+import com.wordalytica.wordset.core.WordSet;
 import com.wordalytica.wordset.predicate.Predicate;
 import com.wordalytica.wordset.predicate.PredicateBuilder;
 
-abstract class AbstractWordSet<T extends AbstractWordSet<T>> implements WordSet {
+public abstract class AbstractWordSet<T extends AbstractWordSet<T>> implements WordSet {
     private PredicateBuilder predicateBuilder;
 
     public AbstractWordSet() {
