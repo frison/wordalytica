@@ -1,0 +1,21 @@
+version: "3.8"
+
+x-defaults: &defaults
+  hostname: wordalytica
+  image: maven:3.8.4-openjdk-11-slim
+  working_dir: /wordalytica/Wordstats
+  volumes:
+    # Paths relevent for building, developing, and running the project
+    - './:/wordalytica:rw'
+  environment:
+    - "MAVEN_OPTS=-Dmaven.repo.local=/wordalytica/.m2"
+
+
+services:
+  build:
+    <<: *defaults
+    command: mvn -X install clean compile test
+
+  main:
+    <<: *defaults
+    command: mvn -e exec:java -Dexec.mainClass="com.wordalytica.wordset.Main"
