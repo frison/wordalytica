@@ -18,4 +18,4 @@ services:
 
   main:
     <<: *defaults
-    command: mvn -e exec:java -Dexec.mainClass="com.wordalytica.wordset.Main"
+    command: mvn -q exec:java -Dexec.mainClass="com.wordalytica.wordset.Main"
