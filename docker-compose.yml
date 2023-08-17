@@ -1,21 +1,18 @@
 version: "3.8"
 
 x-defaults: &defaults
-  hostname: wordalytica
-  image: maven:3.8.4-openjdk-11-slim
-  working_dir: /wordalytica/Wordstats
-  volumes:
-    # Paths relevent for building, developing, and running the project
-    - './:/wordalytica:rw'
-  environment:
-    - "MAVEN_OPTS=-Dmaven.repo.local=/wordalytica/.m2"
-
+  # Overrides default command so things don't shut down after the process ends.
+  command: /bin/sh -c "while sleep 1000; do :; done"
 
 services:
-  build:
+  java:
     <<: *defaults
-    command: mvn -X install clean compile test
-
-  main:
-    <<: *defaults
-    command: mvn -q exec:java -Dexec.mainClass="com.wordalytica.wordset.Main"
+    image: frison/dev:java
+    environment:
+      - MAVEN_OPTS=-Dmaven.repo.local=/workspace/.m2
+      - JAVA_OPTS="-Xms512m -Xmx1024m"
+    working_dir: /workspace/Wordstats
+    volumes:
+      - ./:/workspace
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.ssh:/home/human/.ssh:ro

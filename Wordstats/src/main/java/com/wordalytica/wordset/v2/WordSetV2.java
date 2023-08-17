@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class WordSetV2 implements WordSet<WordSetV2> {
-    private final Integer CACHE_DEPTH = 2; // You better have a lot of memory to crank this value
+    private final Integer CACHE_DEPTH = 1; // You better have a lot of memory to crank this value
     private HashSet<String> allWords;
     private PredicateBuilder predicateBuilder;
     private HashMap<String, WordSetV2> cache = new HashMap<>();
